@@ -1,0 +1,38 @@
+<!-- говорит использовать шаблон base -->
+{{template "base" .}}
+<!-- говорит, что этот кусок кода называется content и его нужно вставить в шаблон base -->
+{{define "content"}}
+<!-- Search form -->
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1 class="mt-5 text-center">Search for Availability</h1>
+
+            <form action="" method="get" novalidate class="needs-validation">
+
+               <!-- datepicker -->
+              <div class="row">
+                <div class="col">
+                  <div class="row" id="reservation-dates">
+                      <div class="col">
+                        <input required class="form-control" type="text" name="start" placeholder="Arrival date">
+                      </div>
+                      <div class="col">
+                        <input required class="form-control" type="text" name="end" placeholder="Depature">  
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+
+              <!-- search Availability button -->
+              <button type="submit" class="btn btn-primary">Search Availability</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{end}}

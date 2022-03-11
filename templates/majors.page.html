@@ -1,0 +1,27 @@
+<!-- говорит использовать шаблон base -->
+{{template "base" .}}
+<!-- говорит, что этот кусок кода называется content и его нужно вставить в шаблон base -->
+{{define "content"}}
+<div class="container">
+
+    <div class="row">
+      <div class="col">
+        <img src="static/images/marjors-suite.png" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="room image">
+      </div>
+    </div>
+
+      <div class="row">
+
+          <div class="col">
+              <h1 class="text-center mt-4">Major's Suite</h1>
+              <p class="text-center">Your home away from home, set on the majestic waters of the Atlanic Ocean</p>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          <a href="/search-availability" class="btn btn-success">Check Availability</a>
+        </div>
+      </div>
+  </div>
+
+{{end}}
