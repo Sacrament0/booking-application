@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"text/template"
 
 	"github.com/alexedwards/scs/v2"
@@ -16,4 +17,5 @@ type AppConfig struct {
 	InProduction bool
 	// Сессии
 	Session *scs.SessionManager
+	InfoLog *log.Logger
 }

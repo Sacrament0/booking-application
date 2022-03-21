@@ -1,8 +1,8 @@
 package main
 
 import (
-	"goDev/booking-application/pkg/config"
-	"goDev/booking-application/pkg/handlers"
+	"goDev/booking-application/internal/config"
+	"goDev/booking-application/internal/handlers"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -14,8 +14,10 @@ func routes(app *config.AppConfig) http.Handler {
 	// создаем мультиплексор
 	mux := chi.NewRouter()
 
-	// middleware
+	// MIDDLEWARE
+
 	mux.Use(middleware.Recoverer)
+	// ignore any request that is a post that doesnt have proper cross site request forgery token
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
 
@@ -24,8 +26,13 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/generals-quarters", handlers.Repo.Generals)
 	mux.Get("/majors-suite", handlers.Repo.Majors)
+
 	mux.Get("/make-reservation", handlers.Repo.Reservation)
+
 	mux.Get("/search-availability", handlers.Repo.Availability)
+	mux.Post("/search-availability", handlers.Repo.PostAvailability)
+	mux.Post("/search-availability-json", handlers.Repo.AvailabilitySJON)
+
 	mux.Get("/contact", handlers.Repo.Contact)
 
 	// обработка статических файлов

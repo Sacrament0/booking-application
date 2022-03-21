@@ -3,12 +3,14 @@ package render
 import (
 	"bytes"
 	"fmt"
-	"goDev/booking-application/pkg/config"
-	"goDev/booking-application/pkg/models"
+	"goDev/booking-application/internal/config"
+	"goDev/booking-application/internal/models"
 	"log"
 	"net/http"
 	"path/filepath"
 	"text/template"
+
+	"github.com/justinas/nosurf"
 )
 
 // переменная, содержащая функции для использования в  шаблоне (в renderTemplateTest)
@@ -23,12 +25,13 @@ func NewTemplates(a *config.AppConfig) {
 }
 
 // функция добавления дефолтных данных на страницу, нужна чтобы добавлять в нее, а не в RenderTemplate
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
 // renderTemplate рендерит страницу (второй аргумент - название страницы), третий - данные для страницы
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 
 	// переменная для хранени кэша
 	var tc map[string]*template.Template
@@ -51,9 +54,10 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 	buf := new(bytes.Buffer)
 
 	//добавляем данные на страницу
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	// записываем шаблон в буфер, второй аргумент - переданные данные
+	// td - CSRF токен, чтобы можно было постить
 	_ = t.Execute(buf, td)
 	// отправляем браузеру все, что хранится в буфере
 	_, err := buf.WriteTo(w)

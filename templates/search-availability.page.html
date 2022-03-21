@@ -10,8 +10,9 @@
         <div class="col-md-8">
             <h1 class="mt-5 text-center">Search for Availability</h1>
 
-            <form action="" method="get" novalidate class="needs-validation">
-
+            <form action="/search-availability" method="post" novalidate class="needs-validation">
+              <!-- добавление токена из бэка, чтобы разрешить запрос post -->
+              <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
                <!-- datepicker -->
               <div class="row">
                 <div class="col">
@@ -34,5 +35,16 @@
         </div>
     </div>
 </div>
+
+{{end}}
+
+{{define "js"}}
+
+<script>
+  const elem = document.getElementById('reservation-dates');
+  const rangePicker = new DateRangePicker(elem, {
+    format: "yyyy-mm-dd",
+  });
+</script>
 
 {{end}}

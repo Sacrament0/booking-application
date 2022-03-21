@@ -106,19 +106,20 @@
   <script src="https://unpkg.com/notie"></script>
 
   <!-- блок для размещения js -->
-    {{block "js" .}}
+    {{block "js".}}
 
     {{end}}
 
   <script>
+    
 
     let attention = Prompt();
-  
+// NEEDS VALIDATION ----------------------------------------------------------------------
     (function () {
-    'use strict'
+    'use strict';
 
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation')
+    let forms = document.querySelectorAll('.needs-validation')
 
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms)
@@ -134,11 +135,7 @@
       })
   })()
 
-  //choose reservation dates
-  const elem = document.getElementById('reservation-dates');
-  const rangepicker = new DateRangePicker(elem, {
-   // ...options
-  }); 
+//---------------------------------------------------------------------------------------------
 
   // notie
   function notify(msg, msgType) {
@@ -154,11 +151,12 @@
     title: title,
     html: text,
     icon: icon,
-    confirmButtonText: confirmButtonText
+    confirmButtonText: confirmButtonText,
     })
   }
 
-  // modules
+  // modules 
+
   function Prompt() {
 
     let toast = function(c){
@@ -198,7 +196,7 @@
         icon: 'success',
         title: title,
         text: msg,
-        footer: footer
+        footer: footer,
       })
     }
 
@@ -213,45 +211,54 @@
         icon: 'error',
         title: title,
         text: msg,
-        footer: footer
+        footer: footer,
       })
     }
-
+// CUSTOM ------------------------------------------------------------------------ 
     async function custom(c) {
       const {
         msg = "",
         title = "",
       } = c;
 
-      const { value: formValues } = await Swal.fire({
+      const { value: result } = await Swal.fire({
           title: title,
           html: msg,
           backdrop: false,
           focusConfirm: false,
           showCancelButton: true,
-          willOpen: () => {
-            const elem =  document.getElementById('reservation-dates-modal');
-            const rp = new DateRangePicker(elem, {
-              format: 'yyyy-mm-dd',
-              showOnFocuse: true,
-            })
-          },
+          // willOpen: () => {
+          //   if (c.willOpen !== undefined){
+          //     c.willOpen();
+          //   }
+          // },
           preConfirm: () => {
             return [
               document.getElementById('start').value,
               document.getElementById('end').value
-            ]
-            },
-
-            didOpen: () => {
-              document.getElementById('start').removeAttribute('disabled');
-              document.getElementById('end').removeAttribute('disabled');
+               ]
+             },
+          didOpen: () => {
+            if (c.didOpen !== undefined) {
+              c.didOpen();
             }
-
-           })
-
-          if (formValues) {
-            Swal.fire(JSON.stringify(formValues))
+          }
+          })
+          // если ввели какие-то данные в диалогоое окно
+          if (result) {
+            // если не нажата кнопка cancle
+            if (result.dismiss !== Swal.DismissReason.cancle) {
+              // если данные - не пустая строка
+              if (result.value !== "") {
+                if (c.callback !== undefined) {
+                  c.callback(result);
+                }
+              } else {
+                c.callback(false);
+              }
+            } else {
+              c.callback(false);
+            }
           }
     }
 

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"goDev/booking-application/pkg/config"
-	"goDev/booking-application/pkg/handlers"
-	"goDev/booking-application/pkg/render"
+	"goDev/booking-application/internal/config"
+	"goDev/booking-application/internal/handlers"
+	"goDev/booking-application/internal/render"
 	"log"
 	"net/http"
 	"time"
